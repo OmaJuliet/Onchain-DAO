@@ -74,7 +74,8 @@ export default function Home() {
         args: [fakeNftTokenId],
       });
 
-      await waitForTransaction(tx);
+      // await waitForTransaction(tx);
+      setTimeout(async() => await waitForTransaction(tx), 2000)
     } catch (error) {
       console.error(error);
       window.alert(error);
@@ -241,7 +242,7 @@ export default function Home() {
       );
     } else {
       return (
-        <div>
+        <div className={styles.rows}>
           {proposals.map((p, index) => (
             <div key={index} className={styles.card}>
               <p>Proposal ID: {p.proposalId}</p>
@@ -319,18 +320,21 @@ export default function Home() {
         <div>
           <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
           <div className={styles.description}>Welcome to the DAO!</div>
+            {/* By using optional chaining (?.), you ensure that if any of the properties (data, value) are undefined, 
+            the toString method won't be called */}
           <div className={styles.description}>
-            Your CryptoDevs NFT Balance: {nftBalanceOfUser.data.toString()}
+            Your CryptoDevs NFT Balance: {nftBalanceOfUser.data?.toString()}
             <br />
             {daoBalance.data && (
               <>
                 Treasury Balance:{" "}
-                {formatEther(daoBalance.data.value).toString()} ETH
+                {formatEther(daoBalance.data.value)?.toString()} ETH
               </>
             )}
             <br />
-            Total Number of Proposals: {numOfProposalsInDAO.data.toString()}
+            Total Number of Proposals: {numOfProposalsInDAO.data?.toString()}
           </div>
+
           <div className={styles.flex}>
             <button
               className={styles.button}
@@ -346,8 +350,9 @@ export default function Home() {
             </button>
           </div>
           {renderTabs()}
-          {/* Display additional withdraw button if connected wallet is owner */}
-          {address && address.toLowerCase() === daoOwner.data.toLowerCase() ? (
+
+          {/* ensure that if daoOwner.data is undefined, the toLowerCase method won't be called, preventing the error. */}
+          {address && address.toLowerCase() === daoOwner.data?.toLowerCase() ? (
             <div>
               {loading ? (
                 <button className={styles.button}>Loading...</button>
@@ -360,6 +365,7 @@ export default function Home() {
           ) : (
             ""
           )}
+
         </div>
         <div>
           <img className={styles.image} src="https://i.imgur.com/buNhbF7.png" />

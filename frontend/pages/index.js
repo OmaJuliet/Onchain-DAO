@@ -292,6 +292,7 @@ export default function Home() {
   useEffect(() => {
     if (selectedTab === "View Proposals") {
       fetchAllProposals();
+      console.log("Tab Switched") //New line of code
     }
   }, [selectedTab]);
 
